@@ -7,22 +7,12 @@ rem файлы с расширением *.v8i – информация о ба�
 rem файлы cache.1CD, cache.1CL – кеширование конфигурации и информация о блокировке объектов
 rem файлы *.bin драйвера из конфигурации прямо при запуске базы 1с, или например часть кода в конфигурации 1с, подвергнутая обфускации.
 
-If Exist "%APPDATA%\1C\1Cv8" (
- rem удаляем vrs-cache\cache.1cd
- rem который есть только в %LOCALAPPDATA%
- FOR /D %%i in (%LOCALAPPDATA%\1C\1Cv8\*) do (
-  FOR /D %%j in ("%%i\????????-????-????-????-????????????") do (
-   FOR /D %%l in ("%%j\vrs-cache") do (
-    FOR %%k in (%%l\cache.1cd) do (
-rem    echo удаляем=%%k
-     DEL /F /S /Q /A %%k
-    )
-   )
-  )
- )
 
+forfiles /P "%localappdata%\1c\1Cv8" /d -50 /M *vrs-cache /S /C "cmd /c RD /S /Q @path"
+forfiles /P "%appdata%\1c\1Cv8" /d -50 /M *vrs-cache /S /C "cmd /c RD /S /Q @path"
 
-DEL /F /S /Q /A %LOCALAPPDATA%\1C\1Cv8\*.bin
-DEL /F /S /Q /A %APPDATA%\1C\1Cv8\*.bin
+forfiles /P "%localappdata%\1c\1Cv8" /d -50 /M *Config /S /C "cmd /c RD /S /Q @path"
+forfiles /P "%localappdata%\1c\1Cv8" /d -50 /M *ConfigSave /S /C "cmd /c RD /S /Q @path"
 
-)
+forfiles /P "%localappdata%\1c\1Cv8" /d -50 /M *.bin /S /C "cmd /c DEL /F /S /Q /A @path"
+forfiles /P "%appdata%\1c\1Cv8" /d -50 /M *.bin /S /C "cmd /c DEL /F /S /Q /A @path"
